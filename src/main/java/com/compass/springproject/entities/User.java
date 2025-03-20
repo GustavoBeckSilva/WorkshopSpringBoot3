@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,7 +28,8 @@ public class User implements Serializable{ // Relação um para muitos com pedid
 	private String email;
 	private String phone;
 	private String password;
-		
+	
+	@JsonIgnore // Resolve problema de loop causado pela associação entre usuário e lista de pedidos
 	@OneToMany(mappedBy = "client") // Atributo mapeado pela classe Pedido
 	private List<Order> orders = new ArrayList<>(); // Não se criar setters em coleções
 	

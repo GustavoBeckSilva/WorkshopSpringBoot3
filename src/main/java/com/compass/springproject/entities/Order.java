@@ -3,6 +3,10 @@ package com.compass.springproject.entities;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,6 +24,9 @@ public class Order implements Serializable{ // Relação muitos para um com o us
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	// Marcação que garante que o instante seja exibido no JSON formatado no padrão ISO 8601 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT") 
 	private Instant moment;
 	
 	@ManyToOne
@@ -76,3 +83,12 @@ public class Order implements Serializable{ // Relação muitos para um com o us
 	}
 	
 }
+
+/*
+ * (Um para muitos) Quando um pedido é chamado, o cliente associado a ele
+ * é carregado automaticamente.
+ * Quando o objeto do lado do muitos é carregado, o um vem junto dele.
+ * 
+ * Com a associação para muitos isso não ocorre.
+ * 
+ * */
