@@ -117,6 +117,16 @@ public class Order implements Serializable{ // Relação muitos para um com o us
 		return Objects.equals(id, other.id);
 	}
 	
+	public Double getTotal() {
+		
+		Double total = 0.0;
+		
+		for(OrderItem oi : items)
+			total += oi.getSubTotal();
+		
+		return total;
+	}
+	
 }
 
 /*
