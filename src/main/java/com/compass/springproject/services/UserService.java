@@ -6,6 +6,8 @@ import com.compass.springproject.resources.exceptions.ResourceExceptionHandler;
 import com.compass.springproject.services.exceptions.DatabaseException;
 import com.compass.springproject.services.exceptions.ResourceNotFoundException;
 
+import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -53,10 +55,15 @@ public class UserService {
 	
 	public User update(Long id, User obj) {
 		
-		User entity = userRepository.getReferenceById(id); // Prepara o objeto monitorado para ser manipulado
-		updateData(entity, obj);
+		try {
+			User entity = userRepository.getReferenceById(id); // Prepara o objeto monitorado para ser manipulado
+			updateData(entity, obj);
+			
+			return userRepository.save(entity);
+		} catch(EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id);
+		}
 		
-		return userRepository.save(entity);
 	}
 
 	private void updateData(User entity, User obj) {
